@@ -17,8 +17,11 @@ $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
+$router->post('api/register','UserController@register');
+$router->post('api/login','UserController@login');
+
 //menggunakan route group prefixes
-$router->group(['prefix' => 'api'], function () use ($router) {
+$router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($router) {
     $router->get('motor',  ['uses' => 'MotorController@showAllMotor']);
     $router->get('motor/{id}', ['uses' => 'MotorController@showOneMotor']);
     $router->post('motor', ['uses' => 'MotorController@create']);
