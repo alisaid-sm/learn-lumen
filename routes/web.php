@@ -16,9 +16,14 @@
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
+$router->get('/key', function () {
+    $key = bin2hex(random_bytes(16));
+    return $key;
+});
 
 $router->post('api/register','UserController@register');
 $router->post('api/login','UserController@login');
+$router->post('api/file', ['uses' => 'FileController@upload']);
 
 //menggunakan route group prefixes
 $router->group(['prefix' => 'api', 'middleware' => 'auth'], function () use ($router) {

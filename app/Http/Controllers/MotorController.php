@@ -9,12 +9,17 @@ class MotorController extends Controller
 {
     //menampilkan semua data
     public function showAllMotor() {
-        return response()->json(Motor::all());
+        return $this->responseRequestSuccess(Motor::all());
     }
 
     //menampilkan data per id
     public function showOneMotor($id){
-        return response()->json(Motor::find($id));
+        $motor = Motor::find($id);
+        if ($motor) {
+            return $this->responseRequestSuccess($motor);
+        } else {
+            return $this->responseRequestError('Data not found', 404);
+        }
     }
 
     //insert data
@@ -26,19 +31,19 @@ class MotorController extends Controller
             'pabrikan' => 'required'
         ]);
         $author = Motor::create($request->all());
-        return response()->json($author, 201);
+        return $this->responseRequestSuccess($author, 201);
     }
 
     //update data
     public function update($id, Request $request){
         $author = Motor::findOrFail($id);
         $author->update($request->all());
-        return response()->json($author, 200);
+        return $this->responseRequestSuccess($author);
     }
 
     //hapus data per id
     public function delete($id){
         Motor::findOrFail($id)->delete();
-        return response('Deleted Successfully', 200);
+        return $this->responseRequestSuccess([]);
     }
 }

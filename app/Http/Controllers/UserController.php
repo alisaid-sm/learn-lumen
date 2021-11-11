@@ -22,7 +22,7 @@ class UserController extends Controller
           'password' => $password
       ]);
 
-      return response()->json(['message' => 'Data added successfully'], 201);
+      return $this->responseRequestSuccess($user, 201);
   }
   
   public function login(Request $request)
@@ -37,12 +37,12 @@ class UserController extends Controller
 
       $user = User::where('email', $email)->first();
       if (!$user) {
-          return response()->json(['message' => 'Login failed'], 401);
+          return $this->responseRequestError('Login failed', 401);
       }
 
       $isValidPassword = Hash::check($password, $user->password);
       if (!$isValidPassword) {
-        return response()->json(['message' => 'Login failed'], 401);
+        return $this->responseRequestError('Login failed', 401);
       }
 
       $generateToken = bin2hex(random_bytes(40));
@@ -50,6 +50,6 @@ class UserController extends Controller
           'token' => $generateToken
       ]);
 
-      return response()->json($user);
+      return $this->responseRequestSuccess($user);
   }
 } 
